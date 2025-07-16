@@ -15,7 +15,7 @@ interface Coin {
 function CoinCard({ coin }: { coin: Coin }) {
   const [isOpen, setIsOpen] = useState(false);
   const [chartData, setChartData] = useState<{ prices: [number, number][] } | null>(null);
-  const [coinData, setCoinData] = useState(null);
+  const [, setCoinData] = useState(null);
   const [range, setRange] = useState("7");
   const [loading, setLoading] = useState(false);
 
