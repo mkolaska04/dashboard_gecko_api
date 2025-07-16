@@ -50,19 +50,19 @@ const CoinChart: React.FC<CoinChartProps> = ({ data, days }) => {
           curve: 'catmullRom',
           showMark: showMarks,
           color: '#5e2bff',
-          valueFormatter: (v) => v != null ? v.toFixed(6) : '',
+          valueFormatter: (v: number | null) => v != null ? v.toFixed(6) : '',
         },
       ]}
       xAxis={[
         {
           data: xAxisDates,
           scaleType: 'time',
-          valueFormatter: (date) => formatDate(date),
+          valueFormatter: (date: Date) => formatDate(date),
         },
       ]}
       yAxis={[
         {
-          valueFormatter: (v) => v.toFixed(6), // 👈 dokładność na osi Y
+          valueFormatter: (v: number) => v.toFixed(6), 
         },
       ]}
       sx={{
