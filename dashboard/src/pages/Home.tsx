@@ -34,7 +34,7 @@ function Home() {
 
   return (
     <div>
-      <div className="w-full bg-box p-4 mb-8 shadow-md flex flex-col gap-4 md:flex-row justify-start items-center">
+      <div className="w-full min-h-screen bg-box p-4 mb-8 shadow-md flex flex-col gap-4 md:flex-row justify-start items-center">
         <h2 className="text-2xl font-bold text-secondary cursor-default">CoinCheck</h2>
         <Searchbar onAction={onAction} />
       </div>
