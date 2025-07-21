@@ -1,8 +1,8 @@
 import CoinList from '../components/CoinList';
+import Footer from '../components/Footer';
 import Searchbar from '../components/Searchbar';
 import { useCoins } from '../context/CoinContext';
 import { useEffect, useState } from 'react';
-
 function Home() {
   const { coins, loading, error } = useCoins();
 
@@ -42,6 +42,7 @@ function Home() {
       <div className="space-y-8 max-w-7xl w-3/4 mx-auto">
         <CoinList coinList={coinList} loading={loading} error={error} />
       </div>
+      <Footer />
     </div>
   );
 }
