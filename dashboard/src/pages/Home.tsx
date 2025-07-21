@@ -33,18 +33,21 @@ function Home() {
   }
 
   return (
-    <div>
-      <div className="w-full min-h-screen bg-box p-4 mb-8 shadow-md flex flex-col gap-4 md:flex-row justify-start items-center">
+    <div className="flex flex-col min-h-screen">
+      {/* Header/Searchbar */}
+      <div className="w-full bg-box p-4 mb-8 shadow-md flex flex-col gap-4 md:flex-row justify-start items-center">
         <h2 className="text-2xl font-bold text-secondary cursor-default">CoinCheck</h2>
         <Searchbar onAction={onAction} />
       </div>
 
-      <div className="space-y-8 max-w-7xl w-3/4 mx-auto">
+      {/* Main content */}
+      <main className="flex-grow space-y-8 max-w-7xl w-3/4 mx-auto">
         <CoinList coinList={coinList} loading={loading} error={error} />
-      </div>
+      </main>
+
+      {/* Footer */}
       <Footer />
     </div>
   );
 }
-
 export default Home;
