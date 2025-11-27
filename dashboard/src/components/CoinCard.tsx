@@ -26,24 +26,41 @@ function CoinCard({ coin }: { coin: Coin }) {
       setLoading(true);
 
       try {
-        const res1 = await fetch(`${API}/api/coins/${coin.id}`);
+        const res1 = await fetch(`${API}/api/coins/${coin.id}`, {
+          signal: AbortSignal.timeout(10000),
+        });
+        
+        if (!res1.ok) {
+          throw new Error('Failed to fetch coin details');
+        }
+        
         const data = await res1.json();
+        
         const res2 = await fetch(
-          `${API}/api/market_chart/${coin.id}?vs_currency=usd&days=${range}`
+          `${API}/api/market_chart/${coin.id}?vs_currency=usd&days=${range}`,
+          {
+            signal: AbortSignal.timeout(10000),
+          }
         );
+        
+        if (!res2.ok) {
+          throw new Error('Failed to fetch chart data');
+        }
+        
         const chart = await res2.json();
 
         setCoinData(data);
         setChartData(chart);
       } catch (e) {
-        console.error(e);
+        console.error('Error fetching coin data:', e);
+        setChartData(null);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [isOpen, range]);
+  }, [isOpen, range, coin.id]);
 
   const handleRangeChange = (r: string) => setRange(r);
 
@@ -61,8 +78,12 @@ function CoinCard({ coin }: { coin: Coin }) {
         </div>
         <div className=" w-full flex justify-between items-center">
           ${coin.current_price} <span className={
-            coin.price_change_percentage_24h < 0 ? "text-error" : "text-success"
-          }>{coin.price_change_percentage_24h.toFixed(2)}%</span>
+            coin.price_change_percentage_24h && coin.price_change_percentage_24h < 0 ? "text-error" : "text-success"
+          }>
+            {coin.price_change_percentage_24h !== null && coin.price_change_percentage_24h !== undefined
+              ? `${coin.price_change_percentage_24h.toFixed(2)}%`
+              : 'N/A'}
+          </span>
         </div>
       </div>
 

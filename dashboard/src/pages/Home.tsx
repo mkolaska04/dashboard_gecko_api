@@ -3,20 +3,26 @@ import Footer from '../components/Footer';
 import Searchbar from '../components/Searchbar';
 import { useCoins } from '../context/CoinContext';
 import { useEffect, useState } from 'react';
+
+interface Coin {
+  id: string;
+  name: string;
+  image: string;
+  current_price: number;
+  price_change_percentage_24h: number;
+}
+
 function Home() {
   const { coins, loading, error } = useCoins();
-
-  type Coin = {
-    id: string;
-    name: string;
-  };
 
   const [originalCoins, setOriginalCoins] = useState<Coin[]>([]);
   const [coinList, setCoinList] = useState<Coin[]>([]);
 
   useEffect(() => {
-    setOriginalCoins(coins);  
-    setCoinList(coins);       
+    if (coins && coins.length > 0) {
+      setOriginalCoins(coins);  
+      setCoinList(coins);
+    }       
   }, [coins]);
 
   function onAction(query: string) {

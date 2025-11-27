@@ -30,29 +30,43 @@ export const CoinProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     const fetchCoins = async () => {
+      setLoading(true);
+      setError(null);
+      
       try {
-        const response = await fetch(`${API}/api/coins/markets?vs_currency=usd&order=market_cap_desc`);
+        const response = await fetch(`${API}/api/coins/markets?vs_currency=usd&order=market_cap_desc`, {
+          signal: AbortSignal.timeout(10000), // 10 second timeout
+        });
+        
         if (!response.ok) {
-          throw new Error('Błąd podczas pobierania listy monet');
+          throw new Error(`Failed to fetch coins: ${response.status} ${response.statusText}`);
         }
+        
         const data = await response.json();
+        
+        if (!Array.isArray(data) || data.length === 0) {
+          throw new Error('No coin data received');
+        }
+        
         setCoins(data);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err) {
+        console.error('Error fetching coins:', err);
+        const errorMessage = err instanceof Error ? err.message : 'Failed to load cryptocurrency data. Please check if the backend server is running.';
+        setError(errorMessage);
+        setCoins([]); // Set empty array on error
       } finally {
         setLoading(false);
       }
     };
 
     fetchCoins();
-  }, []); // Pusta tablica zależności oznacza: uruchom tylko raz!
+  }, []); 
 
   const value = { coins, loading, error };
 
   return <CoinContext.Provider value={value}>{children}</CoinContext.Provider>;
 };
 
-// Własny hook, aby ułatwić korzystanie z kontekstu
 export const useCoins = () => {
   return useContext(CoinContext);
 };
